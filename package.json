@@ -1,6 +1,6 @@
 {
   "name": "legion-io-delay",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "description": "Legion load testing framework: delay utility",
   "main": "src/index.js",
   "scripts": {
@@ -10,7 +10,8 @@
   "author": "Christopher Lane Hinson <lane@webperformance.com>",
   "license": "APSL-2.0",
   "dependencies": {
-    "legion": "https://github.com/lane-webperformance/legion.git#v0.0.20"
+    "legion-io": "git+https://github.com/lane-webperformance/legion-io.git#v0.0.22",
+    "legion-metrics": "git+https://github.com/lane-webperformance/legion-metrics.git#v0.0.22"
   },
   "devDependencies": {
     "eslint": "^2.11.1",
