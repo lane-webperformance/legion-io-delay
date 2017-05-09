@@ -1,6 +1,6 @@
 {
   "name": "legion-io-delay",
-  "version": "0.0.21",
+  "version": "0.0.28",
   "description": "Legion load testing framework: delay utility",
   "main": "src/index.js",
   "scripts": {
