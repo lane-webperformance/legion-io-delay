@@ -13,7 +13,7 @@ function validate(sample_points) {
 module.exports = function() {
   const f = module.exports.smart.apply(undefined,arguments);
 
-  return Io.get().chain(state => {
+  return Io.get().chain(services => {
     const delay_start = Date.now();
     const milliseconds = f(delay_start)*1000; // *1000 to convert seconds to milliseconds
     return new Promise((resolve,reject) => {
@@ -24,7 +24,7 @@ module.exports = function() {
       }
     }).then(() => {
       const delay_end = Date.now();
-      state.services.metrics.tag(metrics.tags.protocol('delay')).receive(metrics.sample({
+      services.getMetricsReceiver().tag(metrics.tags.protocol('delay')).receive(metrics.sample({
         delay_start: metrics.sample.timestamp(delay_start),
         delay_end: metrics.sample.timestamp(delay_end),
         delay_duration: metrics.sample.duration(delay_end - delay_start),

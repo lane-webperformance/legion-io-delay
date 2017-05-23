@@ -3,16 +3,17 @@
 const delay = require('../src/index');
 const metrics = require('legion-metrics');
 const Io = require('legion-io');
+const core = require('legion-core');
 
 describe('The fetch module for legion Io', function() {
   it('is sane', function(done) {
-    delay(1).run({services:{metrics:metrics.Target.create(metrics.merge).receiver()}}).then(done).catch(done.fail);
+    delay(1).run(core.Services.create().withMetricsTarget(metrics.Target.create(metrics.merge))).then(done).catch(done.fail);
   });
 
   it('measures timings correctly', function(done) {
     const target = metrics.Target.create(metrics.merge);
 
-    delay(3).run({services:{metrics:target.receiver()}}).then(function() {
+    delay(3).run(core.Services.create().withMetricsTarget(target)).then(function() {
       const metrics = JSON.parse(JSON.stringify(target.get()));
 
       expect(metrics.tags.protocol['delay'].values.delay_duration.$avg.avg).toBeGreaterThan(2995);
@@ -32,7 +33,7 @@ describe('The fetch module for legion Io', function() {
     for( let i = 0; i < 1000; i++ )
       tasks.push(delay(1,3));
 
-    Io.all(tasks).run({services:{metrics:target.receiver()}}).then(function() {
+    Io.parallel(tasks).run(core.Services.create().withMetricsTarget(target)).then(function() {
       const metrics = JSON.parse(JSON.stringify(target.get()));
 
       expect(metrics.tags.protocol['delay'].values.delay_duration.$min).toBeGreaterThan(900);
@@ -58,7 +59,7 @@ describe('The fetch module for legion Io', function() {
     for( let i = 0; i < 1000; i++ )
       tasks.push(delay(() => Math.random() + Math.random() + 1));
 
-    Io.all(tasks).run({services:{metrics:target.receiver()}}).then(function() {
+    Io.parallel(tasks).run(core.Services.create().withMetricsTarget(target)).then(function() {
       const metrics = JSON.parse(JSON.stringify(target.get()));
 
       expect(metrics.tags.protocol['delay'].values.delay_duration.$min).toBeGreaterThan(900);
